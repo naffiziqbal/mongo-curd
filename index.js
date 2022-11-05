@@ -32,33 +32,41 @@ client.connect(err => {
                 res.send(services)
             });
 
-            app.get('/services/:id', async(req, res) => {
+            app.get('/services/:id', async (req, res) => {
                 const id = req.params.id;
-                const query = { _id : ObjectId(id)};
-                const service= await serviceCollection.findOne(query);
-            
+                const query = { _id: ObjectId(id) };
+                const service = await serviceCollection.findOne(query);
+
                 res.send(service)
             })
 
             //   Orders api;
-            app.get('/orders', async(req,res)=>{
-                let query  = {};
+            app.get('/orders', async (req, res) => {
+                let query = {};
                 console.log()
-                if(req.query?.email){
+                if (req.query?.email) {
                     query = {
                         email: req.query.email
                     }
                 }
 
                 const cursor = orderCollection.find(query);
-                const orders =await  cursor.toArray();
+                const orders = await cursor.toArray();
                 res.send(orders)
             })
 
-            app.post('/orders', async(req, res)=>{
+            app.post('/orders', async (req, res) => {
                 const order = req.body;
-                const result =await orderCollection.insertOne(order);
+                const result = await orderCollection.insertOne(order);
                 res.send(result);
+
+            })
+            app.delete('/orders/:id', async (req, res) => {
+                const id = req.params.id;
+                const query = { _id: ObjectId(id) };
+                const result = await orderCollection.deleteOne(query);
+                res.send(result);
+
 
             })
 
